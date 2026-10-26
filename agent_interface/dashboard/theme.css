@@ -1,0 +1,58 @@
+/* Adapted palette from pastorsj/market-analysis-claw-demo ui/src/app/globals.css.
+ * Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES.
+ * SPDX-License-Identifier: Apache-2.0
+ * Photon Lab adaptations: standalone controls, scientific panels, responsive layout.
+ */
+:root{
+ color-scheme:dark;--bg:#0a0a0b;--card:#141417;--line:#2a2a31;--muted:#a1a1aa;--text:#ececee;--mint:#8fd400;
+ --brand:#76b900;--sunken:#08080a;--overlay:#1b1b1f;--tint:#1e2912;--warning-bg:#302815;--warning-text:#f0cd6a;
+ --danger:#ff8c91;--font-mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+:root[data-theme="light"]{
+ color-scheme:light;--bg:#f7f7f8;--card:#fff;--line:#dcdce1;--muted:#62626a;--text:#16161a;--mint:#4e8500;
+ --sunken:#ededf0;--overlay:#efeff1;--tint:#edf5df;--warning-bg:#fff4d6;--warning-text:#715300;--danger:#b4232c;
+}
+body{background:var(--bg);color:var(--text);font-family:Inter,Arial,system-ui,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+header{background:var(--bg);border-bottom:1px solid var(--line);min-height:64px;padding:14px 3vw;gap:16px}
+.logo{font-size:19px;font-weight:650;letter-spacing:-.5px}.logo b{color:var(--brand)}
+.badge{background:var(--tint);border-color:var(--line);color:var(--mint);font-size:10px;letter-spacing:.04em}
+main{max-width:1680px;padding:28px 3vw}
+h1,.chat-only h1{font-size:28px;font-weight:650;letter-spacing:-.7px;margin:7px 0}
+h2{font-size:16px;font-weight:650}h3{font-size:13px}
+p,small,label,th,footer{color:var(--muted)}
+.eyebrow{font:600 10px/1.4 var(--font-mono);letter-spacing:.16em;color:var(--mint)}
+.layout{grid-template-columns:minmax(0,1fr) 380px;gap:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px;box-shadow:none}
+.metric{background:var(--sunken);border:1px solid var(--line);border-radius:9px}
+.metric strong,.grid .card strong{font-variant-numeric:tabular-nums;font-weight:600;letter-spacing:-.5px}
+.metric span,.grid .card span{color:var(--muted)}
+button{background:var(--brand);color:#102000;border:1px solid transparent;border-radius:7px;padding:10px 14px}
+button:hover:not(:disabled){background:#8acb10}
+button.secondary,.tabs button{background:var(--overlay);color:var(--text);border:1px solid var(--line)}
+button.secondary:hover:not(:disabled),.tabs button:hover{background:var(--tint);border-color:var(--mint)}
+.tabs button.active{background:var(--tint);color:var(--mint);border-color:var(--mint)}
+button:disabled{opacity:.45}
+select,input,textarea{background:var(--sunken);color:var(--text);border:1px solid var(--line);border-radius:8px}
+textarea:focus{border-color:var(--brand)}
+:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+a{color:var(--mint);text-underline-offset:4px}
+.page-links,body.gpu-page nav{border-bottom:1px solid var(--line);padding:12px 0;margin:0 0 24px;gap:24px;display:flex;flex-wrap:wrap}
+.page-links a,body.gpu-page nav a{font-size:12px;text-decoration:none;padding-bottom:6px;margin-right:0}
+a[aria-current="page"]{color:var(--text);border-bottom:2px solid var(--brand)}
+.stage{border-color:var(--line);color:var(--muted)}.stage strong{color:var(--text)}
+.stage.complete{border-color:var(--brand)}.stage.running{border-color:#e8b500}
+.figure{background:var(--sunken);border:1px solid var(--line)}
+.notice{background:var(--warning-bg);color:var(--warning-text);border-color:#e8b500}
+.message{background:var(--sunken);color:var(--text);border:1px solid var(--line);border-radius:10px;line-height:1.65}
+.message.user{background:var(--tint);border:1px solid color-mix(in srgb,var(--brand) 42%,var(--line))}
+.activity{color:var(--mint);border-color:var(--brand);font-family:var(--font-mono);background:var(--tint);border-radius:0 8px 8px 0}
+.error{color:var(--danger)}pre{color:var(--muted)}th,td{border-color:var(--line)}
+.sample-prompts .prompt{font-size:11px;line-height:1.4}
+.theme-toggle{margin-left:auto;white-space:nowrap;background:var(--overlay);color:var(--text);border:1px solid var(--line);font-size:12px}
+body.gpu-page{padding:0}body.gpu-page main{max-width:1440px;margin:auto}
+body.gpu-page .grid{gap:14px}body.gpu-page .grid .card{border-top:2px solid var(--brand)}
+body.gpu-page #status{font:12px var(--font-mono);color:var(--mint);padding:12px 14px;background:var(--tint);border:1px solid var(--line);border-radius:8px}
+body.gpu-page .chart{margin-top:20px}
+@media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr) 330px}.metrics{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+@media(max-width:600px){header{flex-wrap:wrap}main{padding:20px 16px}h1,.chat-only h1{font-size:24px}.card{padding:15px}.page-links{gap:14px}.grid .card strong{font-size:24px}body.gpu-page td{overflow-wrap:anywhere}body.gpu-page table{table-layout:fixed;font-size:12px}}

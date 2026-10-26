@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GPU utilization · Darknight</title><style>
+*{box-sizing:border-box}body{background:#0c111b;color:#e8edf6;font:15px/1.6 system-ui;margin:0;padding:36px 5vw}main{max-width:1200px;margin:auto}a{color:#8ce6bf;margin-right:20px}h1{font-size:34px;margin:8px 0}p,small{color:#9aaac0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:26px 0}.card{background:#141d2c;border:1px solid #283449;border-radius:14px;padding:22px}.card span{display:block;color:#9aaac0;font-size:12px}.card strong{font-size:30px}.chart{margin:22px 0}canvas{width:100%;height:240px;display:block}.error{color:#ffaaaa}table{border-collapse:collapse;width:100%}td{border-bottom:1px solid #283449;padding:12px}h2{font-size:17px}@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}.card{padding:14px}}
+</style><!-- photon-theme:start --><style>
+/* Adapted palette from pastorsj/market-analysis-claw-demo ui/src/app/globals.css.
+ * Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES.
+ * SPDX-License-Identifier: Apache-2.0
+ * Photon Lab adaptations: standalone controls, scientific panels, responsive layout.
+ */
+:root{
+ color-scheme:dark;--bg:#0a0a0b;--card:#141417;--line:#2a2a31;--muted:#a1a1aa;--text:#ececee;--mint:#8fd400;
+ --brand:#76b900;--sunken:#08080a;--overlay:#1b1b1f;--tint:#1e2912;--warning-bg:#302815;--warning-text:#f0cd6a;
+ --danger:#ff8c91;--font-mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+:root[data-theme="light"]{
+ color-scheme:light;--bg:#f7f7f8;--card:#fff;--line:#dcdce1;--muted:#62626a;--text:#16161a;--mint:#4e8500;
+ --sunken:#ededf0;--overlay:#efeff1;--tint:#edf5df;--warning-bg:#fff4d6;--warning-text:#715300;--danger:#b4232c;
+}
+body{background:var(--bg);color:var(--text);font-family:Inter,Arial,system-ui,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+header{background:var(--bg);border-bottom:1px solid var(--line);min-height:64px;padding:14px 3vw;gap:16px}
+.logo{font-size:19px;font-weight:650;letter-spacing:-.5px}.logo b{color:var(--brand)}
+.badge{background:var(--tint);border-color:var(--line);color:var(--mint);font-size:10px;letter-spacing:.04em}
+main{max-width:1680px;padding:28px 3vw}
+h1,.chat-only h1{font-size:28px;font-weight:650;letter-spacing:-.7px;margin:7px 0}
+h2{font-size:16px;font-weight:650}h3{font-size:13px}
+p,small,label,th,footer{color:var(--muted)}
+.eyebrow{font:600 10px/1.4 var(--font-mono);letter-spacing:.16em;color:var(--mint)}
+.layout{grid-template-columns:minmax(0,1fr) 380px;gap:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px;box-shadow:none}
+.metric{background:var(--sunken);border:1px solid var(--line);border-radius:9px}
+.metric strong,.grid .card strong{font-variant-numeric:tabular-nums;font-weight:600;letter-spacing:-.5px}
+.metric span,.grid .card span{color:var(--muted)}
+button{background:var(--brand);color:#102000;border:1px solid transparent;border-radius:7px;padding:10px 14px}
+button:hover:not(:disabled){background:#8acb10}
+button.secondary,.tabs button{background:var(--overlay);color:var(--text);border:1px solid var(--line)}
+button.secondary:hover:not(:disabled),.tabs button:hover{background:var(--tint);border-color:var(--mint)}
+.tabs button.active{background:var(--tint);color:var(--mint);border-color:var(--mint)}
+button:disabled{opacity:.45}
+select,input,textarea{background:var(--sunken);color:var(--text);border:1px solid var(--line);border-radius:8px}
+textarea:focus{border-color:var(--brand)}
+:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
+a{color:var(--mint);text-underline-offset:4px}
+.page-links,body.gpu-page nav{border-bottom:1px solid var(--line);padding:12px 0;margin:0 0 24px;gap:24px;display:flex;flex-wrap:wrap}
+.page-links a,body.gpu-page nav a{font-size:12px;text-decoration:none;padding-bottom:6px;margin-right:0}
+a[aria-current="page"]{color:var(--text);border-bottom:2px solid var(--brand)}
+.stage{border-color:var(--line);color:var(--muted)}.stage strong{color:var(--text)}
+.stage.complete{border-color:var(--brand)}.stage.running{border-color:#e8b500}
+.figure{background:var(--sunken);border:1px solid var(--line)}
+.notice{background:var(--warning-bg);color:var(--warning-text);border-color:#e8b500}
+.message{background:var(--sunken);color:var(--text);border:1px solid var(--line);border-radius:10px;line-height:1.65}
+.message.user{background:var(--tint);border:1px solid color-mix(in srgb,var(--brand) 42%,var(--line))}
+.activity{color:var(--mint);border-color:var(--brand);font-family:var(--font-mono);background:var(--tint);border-radius:0 8px 8px 0}
+.error{color:var(--danger)}pre{color:var(--muted)}th,td{border-color:var(--line)}
+.sample-prompts .prompt{font-size:11px;line-height:1.4}
+.theme-toggle{margin-left:auto;white-space:nowrap;background:var(--overlay);color:var(--text);border:1px solid var(--line);font-size:12px}
+body.gpu-page{padding:0}body.gpu-page main{max-width:1440px;margin:auto}
+body.gpu-page .grid{gap:14px}body.gpu-page .grid .card{border-top:2px solid var(--brand)}
+body.gpu-page #status{font:12px var(--font-mono);color:var(--mint);padding:12px 14px;background:var(--tint);border:1px solid var(--line);border-radius:8px}
+body.gpu-page .chart{margin-top:20px}
+@media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr) 330px}.metrics{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+@media(max-width:600px){header{flex-wrap:wrap}main{padding:20px 16px}h1,.chat-only h1{font-size:24px}.card{padding:15px}.page-links{gap:14px}.grid .card strong{font-size:24px}body.gpu-page td{overflow-wrap:anywhere}body.gpu-page table{table-layout:fixed;font-size:12px}}
+
+</style><script>
+(()=>{
+ const root=document.documentElement;
+ try{root.dataset.theme=localStorage.getItem('photon-theme')||'dark'}catch{root.dataset.theme='dark'}
+ document.addEventListener('DOMContentLoaded',()=>{
+  const button=document.createElement('button');
+  button.type='button';button.className='theme-toggle';
+  function update(){button.textContent=root.dataset.theme==='light'?'Dark theme':'Light theme';button.setAttribute('aria-label','Switch to '+button.textContent.toLowerCase())}
+  button.onclick=()=>{root.dataset.theme=root.dataset.theme==='light'?'dark':'light';try{localStorage.setItem('photon-theme',root.dataset.theme)}catch{}update();window.dispatchEvent(new Event('resize'))};
+  (document.querySelector('header')||document.querySelector('nav')).append(button);update();
+  document.querySelectorAll('nav a').forEach(a=>{if(new URL(a.href).pathname===location.pathname)a.setAttribute('aria-current','page')});
+ });
+})();
+
+</script><!-- photon-theme:end --></head><body class="gpu-page"><main><nav><a href="/" target="_blank">Pipeline dashboard ↗</a><a href="/hermes" target="_blank">Hermes agent ↗</a></nav><h1>Darknight GPU utilization</h1><p>Live NVIDIA GB10 telemetry · refreshes every 2 seconds</p><div id="status" role="status">Connecting…</div><div class="grid"><div class="card"><span>GPU utilization</span><strong id="util">—</strong></div><div class="card"><span>Memory controller utilization</span><strong id="memutil">—</strong></div><div class="card"><span>GPU compute memory allocated</span><strong id="compute">—</strong><small id="computepercent" style="display:block"></small></div><div class="card"><span>Shared system RAM utilization</span><strong id="rampercent">—</strong><small>CPU + GPU workloads</small></div><div class="card"><span>GPU temperature</span><strong id="temp">—</strong></div><div class="card"><span>GPU power draw</span><strong id="power">—</strong></div></div><div class="card chart"><h2>GPU activity · last 4 minutes in this tab</h2><canvas id="chart" aria-label="GPU utilization chart, 0 to 100 percent"></canvas><small>Measured utilization, not a benchmark. Gaps indicate unavailable samples.</small></div><div class="card" style="margin-bottom:22px"><h2>GPU compute process memory</h2><table><thead><tr><th style="text-align:left">Process</th><th style="text-align:left">PID</th><th style="text-align:left">Allocated memory</th></tr></thead><tbody id="processes"></tbody></table><p>Reported GPU compute allocations only. Excludes graphics processes and other driver allocations; this is not total GPU memory usage. The percentage compares these allocations with shared physical RAM capacity.</p></div><div class="card"><h2>Memory and model</h2><table><tr><td>Shared system RAM used / total</td><td id="ram">—</td></tr><tr><td>GPU memory used / total</td><td id="gpumem">—</td></tr><tr><td>Served model</td><td id="model">—</td></tr></table><p>GB10 uses unified memory. System RAM includes CPU and GPU workloads; it is not a measurement of GPU-only allocation. Unsupported NVIDIA metrics are shown as unavailable.</p></div></main><script>
+const $=id=>document.getElementById(id);let samples=[],busy=false;const fmt=(v,suffix='',digits=0)=>v===null||v===undefined?'Unavailable':v.toFixed(digits)+suffix;
+function draw(){let c=$('chart'),d=devicePixelRatio||1,w=c.clientWidth,h=240;c.width=w*d;c.height=h*d;let x=c.getContext('2d');x.scale(d,d);x.font='12px system-ui';for(let p of [0,25,50,75,100]){let y=12+(100-p)/100*195;x.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--line').trim();x.beginPath();x.moveTo(38,y);x.lineTo(w,y);x.stroke();x.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();x.fillText(p+'%',0,y+4)}x.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--mint').trim();x.lineWidth=2;x.beginPath();let pen=false;for(let i=0;i<samples.length;i++){let s=samples[i];if(s.value===null){pen=false;continue}let px=38+(s.time-(Date.now()-240000))/240000*(w-42),py=12+(100-s.value)/100*195;if(pen)x.lineTo(px,py);else x.moveTo(px,py);pen=true}x.stroke();x.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--muted').trim();x.fillText('4 minutes ago',38,235);x.fillText('Now',w-30,235)}
+async function refresh(){if(busy)return;busy=true;try{let [r,m]=await Promise.all([fetch('/api/gpu').then(r=>r.json()),fetch('/api/models').then(r=>r.json())]);if(r.error)throw Error(r.error);let g=r.gpus[0];if(!g)throw Error('No GPU returned');$('status').textContent=g.name+' · updated '+new Date(r.timestamp*1000).toLocaleTimeString();$('status').className='';$('util').textContent=fmt(g.utilization,'%');$('memutil').textContent=fmt(g.memory_utilization,'%');$('compute').textContent=fmt(r.compute_memory_used_gib,' GiB',1);$('computepercent').textContent=r.compute_memory_used_gib==null?'Allocation telemetry unavailable':fmt(r.compute_memory_used_gib/r.system_ram_total_gib*100,'% of shared RAM capacity',1);$('rampercent').textContent=fmt(r.system_ram_used_gib/r.system_ram_total_gib*100,'%',1);$('processes').replaceChildren();for(const p of r.compute_processes||[]){const tr=document.createElement('tr');for(const value of [p.name,p.pid,fmt(p.memory_mib==null?null:p.memory_mib/1024,' GiB',2)]){const td=document.createElement('td');td.textContent=value;tr.append(td)}$('processes').append(tr)}if(!r.compute_processes?.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=3;td.textContent=r.compute_memory_used_gib==null?'Process telemetry unavailable':'No active GPU compute processes';tr.append(td);$('processes').append(tr)}$('temp').textContent=fmt(g.temperature,'°C');$('power').textContent=fmt(g.power,' W',1);$('ram').textContent=fmt(r.system_ram_used_gib,'',1)+' / '+fmt(r.system_ram_total_gib,' GiB',1);$('gpumem').textContent=g.memory_used_mib===null||g.memory_total_mib===null?'Unavailable on this GPU':fmt(g.memory_used_mib,'')+' / '+fmt(g.memory_total_mib,' MiB');$('model').textContent=m.served_model||m.message||'Offline';samples.push({time:r.timestamp*1000,value:g.utilization});samples=samples.filter(s=>s.time>Date.now()-240000);draw()}catch(e){$('status').textContent=e.message;$('status').className='error';for(const id of ['util','memutil','compute','computepercent','rampercent','temp','power','ram','gpumem'])$(id).textContent='Unavailable';$('processes').replaceChildren();samples.push({time:Date.now(),value:null});draw()}finally{busy=false}}
+refresh();setInterval(refresh,2000);window.addEventListener('resize',draw);
+</script></body></html>
