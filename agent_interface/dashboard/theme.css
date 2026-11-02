@@ -56,3 +56,33 @@ body.gpu-page .chart{margin-top:20px}
 @media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr) 330px}.metrics{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:900px){.layout{grid-template-columns:1fr}}
 @media(max-width:600px){header{flex-wrap:wrap}main{padding:20px 16px}h1,.chat-only h1{font-size:24px}.card{padding:15px}.page-links{gap:14px}.grid .card strong{font-size:24px}body.gpu-page td{overflow-wrap:anywhere}body.gpu-page table{table-layout:fixed;font-size:12px}}
+
+/* Persistent instrument bar; reserve space so it never covers page controls. */
+body.has-telemetry{padding-bottom:196px}
+.telemetry-bar{position:fixed;z-index:20;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);padding:10px 3vw 14px;box-shadow:0 -8px 30px #0002}
+.telemetry-heading{display:flex;align-items:center;gap:16px;margin-bottom:8px}
+.telemetry-heading a{margin-left:auto;font-size:11px}
+.telemetry-state{font-size:11px;color:var(--muted)}
+.telemetry-dials{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px;max-width:1600px;margin:auto}
+.telemetry-item{display:flex;align-items:center;gap:12px;min-width:0}
+.telemetry-ring{position:relative;width:94px;height:94px;flex:0 0 94px;display:grid;place-items:center}
+.telemetry-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.telemetry-ring circle{fill:none;stroke-width:6}
+.dial-track{stroke:var(--line)}.dial-fill{stroke:var(--mint);stroke-linecap:round;stroke-dasharray:0 100;transition:stroke-dasharray .5s ease}
+.telemetry-ring strong{font-size:16px;font-weight:600;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.dial-caption b{display:block;font-size:12px;color:var(--text);font-weight:600}
+.dial-caption small{display:block;font-size:10px;line-height:1.4;margin-top:5px;color:var(--muted)}
+.telemetry-item.unavailable strong{font-size:10px;color:var(--muted)}
+body.gpu-page .grid{display:none}
+@media(max-width:1250px){.telemetry-item{flex-direction:column;gap:3px;text-align:center}.telemetry-ring{width:80px;height:80px;flex-basis:80px}.telemetry-dials{gap:10px}.dial-caption small{margin-top:2px}}
+@media(max-width:650px){body.has-telemetry{padding-bottom:204px}.telemetry-dials{display:flex;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x proximity}.telemetry-item{min-width:135px;scroll-snap-align:start}.telemetry-heading{gap:8px}.telemetry-state{font-size:9px}.telemetry-heading .eyebrow{font-size:9px}.telemetry-bar{padding:8px 12px}.telemetry-ring{width:76px;height:76px;flex-basis:76px}}
+@media(prefers-reduced-motion:reduce){.dial-fill{transition:none}}
+
+.telemetry-processes{margin-top:8px;border-top:1px solid var(--line);padding-top:7px;font-size:12px}
+.telemetry-processes summary{cursor:pointer;color:var(--mint);font-weight:600}
+.telemetry-process-scroll{max-height:180px;overflow:auto;margin-top:8px}
+.telemetry-processes table{width:100%;font-size:12px;border-collapse:collapse}
+.telemetry-processes th,.telemetry-processes td{padding:7px 10px;text-align:left;overflow-wrap:anywhere}
+.telemetry-processes td:first-child{font-family:var(--font-mono)}
+.telemetry-processes>small{font-size:10px}
+@media(max-width:650px){.telemetry-processes table{min-width:480px}}

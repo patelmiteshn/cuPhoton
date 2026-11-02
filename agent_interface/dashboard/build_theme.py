@@ -2,7 +2,7 @@
 from pathlib import Path
 import re
 base=Path(__file__).resolve().parent
-block='<!-- photon-theme:start --><style>\n'+(base/'theme.css').read_text()+'\n</style><script>\n'+(base/'theme.js').read_text()+'\n</script><!-- photon-theme:end -->'
+block='<!-- photon-theme:start --><style>\n'+(base/'theme.css').read_text()+'\n</style><script>\n'+(base/'theme.js').read_text()+'\n'+(base/'telemetry.js').read_text()+'\n</script><!-- photon-theme:end -->'
 for name in ('index.html','gpu.html'):
     p=base/name
     s=p.read_text()
