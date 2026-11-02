@@ -86,3 +86,21 @@ body.gpu-page .grid{display:none}
 .telemetry-processes td:first-child{font-family:var(--font-mono)}
 .telemetry-processes>small{font-size:10px}
 @media(max-width:650px){.telemetry-processes table{min-width:480px}}
+
+.pipeline-intro h1{max-width:1100px;line-height:1.2;font-size:32px}
+.pipeline-overview{margin:24px 0 20px;padding:16px;background:#fff;border:1px solid var(--line);border-radius:13px;overflow-x:auto}
+.pipeline-overview img{display:block;width:100%;height:auto;max-width:1200px;margin:auto}
+.chat-only .pipeline-overview{display:none}
+@media(max-width:600px){.pipeline-intro h1{font-size:24px}.pipeline-overview{padding:8px}.pipeline-overview img{min-width:640px}}
+
+.pipeline-intro h1{color:var(--mint)}
+
+.pipeline-overview{background:var(--bg);padding:0;border-color:var(--line)}
+.pipeline-overview img{max-width:none}
+.pipeline-overview .pipeline-image-light{display:none}
+.pipeline-overview .pipeline-image-dark{display:block}
+:root[data-theme="light"] .pipeline-overview .pipeline-image-light{display:block}
+:root[data-theme="light"] .pipeline-overview .pipeline-image-dark{display:none}
+
+.pipeline-overview{max-width:1150px;width:90%;margin:20px auto}
+@media(max-width:600px){.pipeline-overview{width:100%}}

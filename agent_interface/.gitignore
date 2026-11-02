@@ -6,3 +6,6 @@ model-state.json
 chat-runs/
 
 tool-artifacts/
+
+# Machine-specific model paths and launch settings
+models.extra.json
